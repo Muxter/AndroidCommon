@@ -57,4 +57,31 @@ public class ViewConfigurationUtils {
         ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
         return viewConfiguration.hasPermanentMenuKey();
     }
+
+    /**
+     * 双击间隔时间.在该时间内是双击，否则是单击
+     *
+     * @return
+     */
+    public static int getDoubleTapTimeout() {
+        return ViewConfiguration.getDoubleTapTimeout();
+    }
+
+    /**
+     * 按住后，状态转变为长按状态需要的时间
+     *
+     * @return
+     */
+    public static int getLongPressTimeout() {
+        return ViewConfiguration.getLongPressTimeout();
+    }
+
+    /**
+     * 重复按键的间隔时间
+     *
+     * @return
+     */
+    public static int getKeyRepeatTimeout() {
+        return ViewConfiguration.getKeyRepeatTimeout();
+    }
 }

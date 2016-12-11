@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.matao.common.util.ScreenUtils;
+import com.matao.common.util.ViewConfigurationUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,5 +16,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, ScreenUtils.getScreenHeight(this) + "");
+        Log.d(TAG, ViewConfigurationUtils.hasPermanentMenuKey(this) + "");
     }
 }

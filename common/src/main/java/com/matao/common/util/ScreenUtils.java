@@ -5,6 +5,8 @@ import android.util.DisplayMetrics;
 
 /**
  * Created by matao on 2016-12-11 16:19
+ * <p>
+ * ScreenUtils提供了获取屏幕宽高以及dp与px相互转换的方法
  */
 
 public class ScreenUtils {

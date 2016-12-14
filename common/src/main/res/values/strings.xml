@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">common</string>
-    <string name="install">Auto Install</string>
+    <string name="auto_install">Auto Install</string>
+    <string name="install">INSTALL</string>
+    <string name="next">NEXT</string>
+    <string name="done">DONE</string>
 </resources>

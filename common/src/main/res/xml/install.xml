@@ -3,5 +3,5 @@
     android:accessibilityEventTypes="typeAllMask"
     android:accessibilityFeedbackType="feedbackSpoken"
     android:canRetrieveWindowContent="true"
-    android:description="@string/install"
-    android:notificationTimeout="1000" />
+    android:description="@string/auto_install"
+    android:notificationTimeout="100" />

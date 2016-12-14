@@ -1,6 +1,8 @@
 package com.matao.common.accessibility;
 
 import android.accessibilityservice.AccessibilityService;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.List;
@@ -19,8 +21,15 @@ public abstract class BaseAccessibilityService extends AccessibilityService {
      * @param nodeInfo 按钮节点信息
      */
     protected void performViewClick(AccessibilityNodeInfo nodeInfo) {
-        if (nodeInfo.isClickable()) {
-            nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        if (nodeInfo == null) {
+            return;
+        }
+        while (nodeInfo != null) {
+            if (nodeInfo.isClickable()) {
+                nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                break;
+            }
+            nodeInfo = nodeInfo.getParent();
         }
     }
 
@@ -97,6 +106,39 @@ public abstract class BaseAccessibilityService extends AccessibilityService {
             }
         }
         return null;
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    protected AccessibilityNodeInfo findViewById(String id) {
+        AccessibilityNodeInfo rootNodeInfo = getRootInActiveWindow();
+        if (rootNodeInfo == null) {
+            return null;
+        }
+        List<AccessibilityNodeInfo> nodeInfoList = rootNodeInfo.findAccessibilityNodeInfosByViewId(id);
+        if (nodeInfoList != null && !nodeInfoList.isEmpty()) {
+            for (AccessibilityNodeInfo nodeInfo : nodeInfoList) {
+                if (nodeInfo != null) {
+                    return nodeInfo;
+                }
+            }
+        }
+        return null;
+    }
+
+    protected void clickTextViewByText(String text) {
+        AccessibilityNodeInfo accessibilityNodeInfo = getRootInActiveWindow();
+        if (accessibilityNodeInfo == null) {
+            return;
+        }
+        List<AccessibilityNodeInfo> nodeInfoList = accessibilityNodeInfo.findAccessibilityNodeInfosByText(text);
+        if (nodeInfoList != null && !nodeInfoList.isEmpty()) {
+            for (AccessibilityNodeInfo nodeInfo : nodeInfoList) {
+                if (nodeInfo != null) {
+                    performViewClick(nodeInfo);
+                    break;
+                }
+            }
+        }
     }
 
 

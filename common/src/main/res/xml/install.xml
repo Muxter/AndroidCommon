@@ -4,4 +4,4 @@
     android:accessibilityFeedbackType="feedbackSpoken"
     android:canRetrieveWindowContent="true"
     android:description="@string/auto_install"
-    android:notificationTimeout="100" />
+    android:notificationTimeout="300" />

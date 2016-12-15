@@ -22,4 +22,10 @@
         android:layout_height="wrap_content"
         android:text="turn on access" />
 
+    <Button
+        android:id="@+id/bt_clean"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clean" />
+
 </LinearLayout>

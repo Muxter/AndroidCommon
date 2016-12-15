@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">common</string>
     <string name="auto_install">Auto Install</string>
+    <string name="clean_bg_process">Clean Background Process</string>
     <string name="install">INSTALL</string>
     <string name="next">NEXT</string>
     <string name="done">DONE</string>
+    <string name="uninstall">UNINSTALL</string>
+    <string name="force_stop">FORCE STOP</string>
 </resources>

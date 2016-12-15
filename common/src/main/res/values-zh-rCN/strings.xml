@@ -1,6 +1,9 @@
 <resources>
     <string name="auto_install">自动安装</string>
+    <string name="clean_bg_process">清除后台进程</string>
     <string name="install">安装</string>
     <string name="next">下一步</string>
     <string name="done">完成</string>
+    <string name="uninstall">卸载</string>
+    <string name="force_stop">强行停止</string>
 </resources>

@@ -23,22 +23,22 @@ public class AutoInstallAccessibilityService extends BaseAccessibilityService {
      */
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (event.getSource() != null
+        if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 && event.getPackageName().equals("com.android.packageinstaller")) {
 
-            AccessibilityNodeInfo installNodeInfo = findViewByText(getString(R.string.install), true);
+            AccessibilityNodeInfo installNodeInfo = findClickableViewByText(getString(R.string.install));
             if (installNodeInfo != null) {
                 performViewClick(installNodeInfo);
                 return;
             }
 
-            AccessibilityNodeInfo nextNodeInfo = findViewByText(getString(R.string.next), true);
+            AccessibilityNodeInfo nextNodeInfo = findClickableViewByText(getString(R.string.next), true);
             if (nextNodeInfo != null) {
                 performViewClick(nextNodeInfo);
                 return;
             }
 
-            AccessibilityNodeInfo doneNodeInfo = findViewByText(getString(R.string.done), true);
+            AccessibilityNodeInfo doneNodeInfo = findClickableViewByText(getString(R.string.done), true);
             if (doneNodeInfo != null) {
                 performViewClick(doneNodeInfo);
                 return;

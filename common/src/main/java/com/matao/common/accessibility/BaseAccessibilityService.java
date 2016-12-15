@@ -81,8 +81,8 @@ public abstract class BaseAccessibilityService extends AccessibilityService {
         performGlobalAction(AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD);
     }
 
-    protected AccessibilityNodeInfo findViewByText(String text) {
-        return findViewByText(text, false);
+    protected AccessibilityNodeInfo findClickableViewByText(String text) {
+        return findClickableViewByText(text, true);
     }
 
     /**
@@ -92,7 +92,7 @@ public abstract class BaseAccessibilityService extends AccessibilityService {
      * @param clickable 该View是否可以点击
      * @return
      */
-    protected AccessibilityNodeInfo findViewByText(String text, boolean clickable) {
+    protected AccessibilityNodeInfo findClickableViewByText(String text, boolean clickable) {
         AccessibilityNodeInfo rootNodeInfo = getRootInActiveWindow();
         if (rootNodeInfo == null) {
             return null;
@@ -101,6 +101,22 @@ public abstract class BaseAccessibilityService extends AccessibilityService {
         if (nodeInfoList != null && !nodeInfoList.isEmpty()) {
             for (AccessibilityNodeInfo nodeInfo : nodeInfoList) {
                 if (nodeInfo != null && (nodeInfo.isClickable() == clickable)) {
+                    return nodeInfo;
+                }
+            }
+        }
+        return null;
+    }
+
+    protected AccessibilityNodeInfo findViewByText(String text) {
+        AccessibilityNodeInfo rootNodeInfo = getRootInActiveWindow();
+        if (rootNodeInfo == null) {
+            return null;
+        }
+        List<AccessibilityNodeInfo> nodeInfoList = rootNodeInfo.findAccessibilityNodeInfosByText(text);
+        if (nodeInfoList != null && !nodeInfoList.isEmpty()) {
+            for (AccessibilityNodeInfo nodeInfo : nodeInfoList) {
+                if (nodeInfo != null) {
                     return nodeInfo;
                 }
             }

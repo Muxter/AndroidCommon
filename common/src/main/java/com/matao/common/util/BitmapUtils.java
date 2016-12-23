@@ -17,11 +17,13 @@ public class BitmapUtils {
      * @param resId
      * @param reqWidth  图片期望的宽度
      * @param reqHeight 图片期望的高度
-     * @return  bitmap
+     * @return bitmap
      */
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
+        // 当inJustDecodeBounds = true时，就可以让解析方法禁止为bitmap分配内存，
+        // BitmapFactory.decodeResource返回值也不再是一个Bitmap对象，而是null, 但宽高依然被赋值
         BitmapFactory.decodeResource(res, resId, options);
 
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
@@ -37,7 +39,7 @@ public class BitmapUtils {
      * @param options
      * @param reqWidth
      * @param reqHeight
-     * @return  inSampleSize
+     * @return inSampleSize
      */
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         int height = options.outHeight;

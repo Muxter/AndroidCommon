@@ -23,7 +23,7 @@ public class LogUtils {
     private static final int LEVEL = VERBOSE;
 
     private LogUtils() {
-        throw new AssertionError("LogUtil cannot be instantiated!");
+        throw new UnsupportedOperationException("LogUtil cannot be instantiated!");
     }
 
     public static boolean isDebuggable() {

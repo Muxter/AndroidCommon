@@ -12,6 +12,11 @@ import android.net.Uri;
  */
 
 public class ShortCutUtils {
+
+    private ShortCutUtils() {
+        throw new UnsupportedOperationException("ShortCutUtils cannot be instantiated!");
+    }
+
     /**
      * 是否添加了快捷键
      * <p>

@@ -9,8 +9,9 @@ import android.view.ViewConfiguration;
  * ViewConfigurationUtils提供了一些自定义控件用到的标准常量，比如尺寸大小，滑动距离，敏感度等等。
  */
 public class ViewConfigurationUtils {
+
     private ViewConfigurationUtils() {
-        throw new AssertionError("ViewConfigurationUtils cannot be instantiated!");
+        throw new UnsupportedOperationException("ViewConfigurationUtils cannot be instantiated!");
     }
 
     /**

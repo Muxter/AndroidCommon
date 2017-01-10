@@ -11,7 +11,7 @@ import android.util.DisplayMetrics;
 
 public class ScreenUtils {
     private ScreenUtils() {
-        throw new AssertionError("ScreenUtils cannot be instantiated!");
+        throw new UnsupportedOperationException("ScreenUtils cannot be instantiated!");
     }
 
     public static int getScreenWidth(Context context) {

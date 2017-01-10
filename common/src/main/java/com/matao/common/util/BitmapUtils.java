@@ -10,6 +10,10 @@ import android.graphics.BitmapFactory;
 
 public class BitmapUtils {
 
+    private BitmapUtils() {
+        throw new UnsupportedOperationException("BitmapUtils cannot be instantiated!");
+    }
+
     /**
      * 将任意图片压缩成 reqWidth * reqHeight 的缩略图
      *

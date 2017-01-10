@@ -11,6 +11,10 @@ import java.io.File;
 
 public class DiskCacheUtils {
 
+    private DiskCacheUtils() {
+        throw new UnsupportedOperationException("DiskCacheUtils cannot be instantiated!");
+    }
+
     public static File getDiskCacheDir(Context context, String uniqueName) {
         String cachePath;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())

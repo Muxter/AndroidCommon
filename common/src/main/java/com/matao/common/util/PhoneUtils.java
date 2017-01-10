@@ -13,6 +13,11 @@ import java.util.regex.Pattern;
  */
 
 public class PhoneUtils {
+
+    private PhoneUtils() {
+        throw new UnsupportedOperationException("PhoneUtils cannot be instantiated!");
+    }
+
     public static void callSysPhoneUI(Context context, String phone) {
         try {
             Intent intent = new Intent();// 打开系统拨打电话界面

@@ -7,6 +7,11 @@ import android.webkit.MimeTypeMap;
  */
 
 public class MimeTypeUtils {
+
+    private MimeTypeUtils() {
+        throw new UnsupportedOperationException("MimeTypeUtils cannot be instantiated!");
+    }
+
     public static String getMimeType(final String fileName) {
         String result = "application/octet-stream"; // 二进制类型
         int extPos = fileName.lastIndexOf(".");

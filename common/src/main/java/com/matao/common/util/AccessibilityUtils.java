@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AccessibilityUtils {
     private AccessibilityUtils() {
-        throw new AssertionError("AccessibilityUtils cannot be instantiated!");
+        throw new UnsupportedOperationException("AccessibilityUtils cannot be instantiated!");
     }
 
     /**

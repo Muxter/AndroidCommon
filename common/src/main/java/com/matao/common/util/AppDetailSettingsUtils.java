@@ -11,7 +11,7 @@ import android.provider.Settings;
 
 public class AppDetailSettingsUtils {
     private AppDetailSettingsUtils() {
-        throw new AssertionError("AppDetailSettingsUtils cannot be instantiated!");
+        throw new UnsupportedOperationException("AppDetailSettingsUtils cannot be instantiated!");
     }
 
     public static void openAppDetailSetting(Context context, String packageName) {

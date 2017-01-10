@@ -9,6 +9,11 @@ import android.content.pm.PackageManager;
  */
 
 public class ManifestUtils {
+
+    private ManifestUtils() {
+        throw new UnsupportedOperationException("ManifestUtils cannot be instantiated!");
+    }
+
     public static Object getMetaData(Context context, String keyName) {
         try {
             ApplicationInfo appi = context.getPackageManager().getApplicationInfo(context.getPackageName(),

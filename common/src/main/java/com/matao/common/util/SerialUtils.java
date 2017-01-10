@@ -20,6 +20,11 @@ import java.util.UUID;
  */
 
 public class SerialUtils {
+
+    private SerialUtils() {
+        throw new UnsupportedOperationException("SerialUtils cannot be instantiated!");
+    }
+
     /**
      * GSF Service (Google Service Framework)
      */

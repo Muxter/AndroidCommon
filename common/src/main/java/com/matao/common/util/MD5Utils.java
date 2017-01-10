@@ -9,7 +9,7 @@ import java.security.MessageDigest;
 public class MD5Utils {
 
     private MD5Utils() {
-        throw new AssertionError("MD5Utils cannot be instantiated!");
+        throw new UnsupportedOperationException("MD5Utils cannot be instantiated!");
     }
 
     public static String getMD5(byte[] source) {

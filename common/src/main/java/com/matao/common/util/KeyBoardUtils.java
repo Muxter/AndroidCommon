@@ -14,7 +14,7 @@ import java.util.TimerTask;
  */
 public class KeyBoardUtils {
     private KeyBoardUtils() {
-        throw new AssertionError("KeyBoardUtils cannot be instantiated!");
+        throw new UnsupportedOperationException("KeyBoardUtils cannot be instantiated!");
     }
 
     /**

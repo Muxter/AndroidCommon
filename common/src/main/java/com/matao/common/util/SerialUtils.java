@@ -2,18 +2,19 @@ package com.matao.common.util;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ContentResolver;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import java.util.UUID;
+
+import static android.content.Context.TELEPHONY_SERVICE;
 
 /**
  * Created by matao on 2016-12-11 16:45
@@ -42,12 +43,12 @@ public class SerialUtils {
      * "com.google.android.providers.gsf.permission.READ_GSERVICES" /> en el
      * AndroidManisfest.xml
      *
-     * @param ctx Contexto de Aplicacion o Actividad
+     * @param context Contexto de Aplicacion o Actividad
      * @return cadena con el id
      */
-    public static String getGSFId(Context ctx) {
+    public static String getGSFId(Context context) {
         final String[] params = {GSF_ID_KEY};
-        final Cursor c = ctx.getContentResolver().query(GSF_URI, null, null, params, null);
+        final Cursor c = context.getContentResolver().query(GSF_URI, null, null, params, null);
 
         if (!c.moveToFirst() || c.getColumnCount() < 2)
             return null;
@@ -64,30 +65,18 @@ public class SerialUtils {
 
     @SuppressLint("NewApi")
     public static String getBuildSerialId() {
-        // Intentamos Tomar el SERIAL del Hardware
-        String deviceId = null;
+        String deviceId;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
-            deviceId = Build.SERIAL; // Android 2.3 y superiores
+            deviceId = Build.SERIAL;
         } else {
             deviceId = "undefined";
         }
         return deviceId;
     }
 
-    /**
-     * Devuelve el SERIAL del Hardware (android.os.Build.SERIAL), o el SERIAL de
-     * Arranque del Dispositivo (Settings.Secure.ANDROID_ID)<br>
-     * Ej: 202ec37cf8d93ece
-     *
-     * @return un numero de Serie unico del Hardware
-     * @throws Exception Si el algoritmo de calculo falla
-     */
-    public static String getAndroidId(Context ctx) {
-        // Intentamos Tomar el SERIAL del Hardware
+    public static String getAndroidId(Context context) {
         String deviceId = null;
-        // tomamos el ANDROID_ID => si esto es NULO, no podemos IDENTIFICAR al
-        // Aparato de forma UNICA
-        deviceId = Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID);
+        deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         if (deviceId == null || deviceId.equalsIgnoreCase("android_id")
                 || deviceId.equalsIgnoreCase("9774d56d682e549c")) {
             deviceId = "undefined";
@@ -95,19 +84,11 @@ public class SerialUtils {
         return deviceId;
     }
 
-    /**
-     * Devuelve el SERIAL del Hardware "Tagus Tablet" (IMEI)<br>
-     * Ej: 202141237121581
-     *
-     * @return un numero de Serie unico del Hardware Tagus (IMEI)
-     * @throws Exception Si el algoritmo de calculo falla
-     */
-    public static String getIMEI(Context ctx) {
+    public static String getImei(Context context) {
         String tmDevice = null;
         try {
-            // Intentamos Tomar el SERIAL del Hardware de Telefonia
-            final TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-            tmDevice = tm.getDeviceId(); // the IMEI for GSM
+            final TelephonyManager tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            tmDevice = tm.getDeviceId();
             if (tmDevice == null) {
                 tmDevice = "undefined";
             }
@@ -118,12 +99,11 @@ public class SerialUtils {
         return tmDevice;
     }
 
-    public static String getIMSI(Context ctx) {
-        String tmDevice = null;
+    public static String getImsi(Context context) {
+        String tmDevice;
         try {
-            // Intentamos Tomar el SERIAL del Hardware de Telefonia
-            final TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-            tmDevice = tm.getSubscriberId(); // the IMSI for GSM
+            final TelephonyManager tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            tmDevice = tm.getSubscriberId();
             if (tmDevice == null) {
                 tmDevice = "undefined";
             }
@@ -148,20 +128,19 @@ public class SerialUtils {
      *
      * @return String con el Device ID calculado
      */
-    public static String getUUId(Context ctx) {
+    public static String getUUId(Context context) {
 
         if (!TextUtils.isEmpty(deviceId))
             return deviceId;
 
         try {
-            final TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+            final TelephonyManager tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
 
             final String tmDevice, tmSerial, androidId;
             tmDevice = "" + tm.getDeviceId();
             tmSerial = "";
-//			tmSerial = "" + tm.getSimSerialNumber();
             androidId = ""
-                    + Settings.Secure.getString(ctx.getContentResolver(),
+                    + Settings.Secure.getString(context.getContentResolver(),
                     Settings.Secure.ANDROID_ID);
 
             UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
@@ -171,7 +150,7 @@ public class SerialUtils {
             // un TELEFONO pero mal configurado (sin SIM o error con datos
             // incorrectos en la Telefonia)
             try {
-                deviceId = getSerialDeviceId(ctx);
+                deviceId = getSerialDeviceId(context);
             } catch (Exception e1) {
                 throw new RuntimeException("FATAL!!!! - This device doesn't have a UNIQUE Serial Number", e);
             }
@@ -181,13 +160,13 @@ public class SerialUtils {
 
     private static String uniqueId = null;
 
-    public static String getUniqueId(Context ctx) {
+    public static String getUniqueId(Context context) {
 
         if (!TextUtils.isEmpty(uniqueId))
             return uniqueId;
 
         try {
-            final TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+            final TelephonyManager tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
 
             final String tmDevice, serial;
             tmDevice = "" + tm.getDeviceId();
@@ -203,7 +182,7 @@ public class SerialUtils {
             // incorrectos en la Telefonia)
 
             try {
-                uniqueId = getSerialDeviceId(ctx);
+                uniqueId = getSerialDeviceId(context);
             } catch (Exception e1) {
                 throw new RuntimeException("FATAL!!!! - This device doesn't have a UNIQUE Serial Number", e);
             }
@@ -237,7 +216,7 @@ public class SerialUtils {
      * @return un numero de Serie unico del Hardware
      * @throws Exception Si el algoritmo de calculo falla
      */
-    public static String getSerialDeviceId(Context ctx) throws Exception {
+    public static String getSerialDeviceId(Context context) throws Exception {
         // Intentamos Tomar el SERIAL del Hardware
         String deviceId = null;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
@@ -246,7 +225,7 @@ public class SerialUtils {
         if (deviceId == null || deviceId.equalsIgnoreCase("unknown")) {
             // tomamos el ANDROID_ID => si esto es NULO, no podemos IDENTIFICAR
             // al Aparato de forma UNICA
-            deviceId = Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID);
+            deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
             if (deviceId == null || deviceId.equalsIgnoreCase("android_id")
                     || deviceId.equalsIgnoreCase("9774d56d682e549c")) {
                 throw new Exception("FATAL!!!! - This device doesn't have a UNIQUE Serial Number");
@@ -262,11 +241,11 @@ public class SerialUtils {
      * @return un numero de Serie unico del Hardware Tagus (IMEI)
      * @throws Exception Si el algoritmo de calculo falla
      */
-    public static String getDeviceId(Context ctx) {
+    public static String getDeviceId(Context context) {
         String tmDevice = null;
         try {
             // Intentamos Tomar el SERIAL del Hardware de Telefonia
-            final TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+            final TelephonyManager tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
             tmDevice = tm.getDeviceId(); // the IMEI for GSM
             if (tmDevice == null) {
                 // Si es un TABLET "Tagus" pero NO tiene Telefonia
@@ -279,56 +258,6 @@ public class SerialUtils {
         return tmDevice;
     }
 
-    /**
-     * 获取应用版本号
-     *
-     * @param context
-     * @return
-     */
-    public static String getVersionName(Context context) {
-        String version = "";
-        try {
-            // 获取packagemanager的实例
-            PackageManager packageManager = context.getPackageManager();
-            // getPackageName()是你当前类的包名，0代表是获取版本信息
-            PackageInfo packInfo;
-            packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-            version = packInfo.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-        }
-        return version;
-    }
-
-    /**
-     * 获取应用代码版本号
-     *
-     * @param context
-     * @return
-     */
-    public static int getVersionCode(Context context) {
-        int versionCode = 0;
-        try {
-            // 获取packagemanager的实例
-            PackageManager packageManager = context.getPackageManager();
-            // getPackageName()是你当前类的包名，0代表是获取版本信息
-            PackageInfo packInfo;
-            packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-            versionCode = packInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-        }
-        return versionCode;
-    }
-
-    public static String getMetaData(Context context, String keyName) {
-        try {
-            ApplicationInfo appi = context.getPackageManager().getApplicationInfo(context.getPackageName(),
-                    PackageManager.GET_META_DATA);
-            return appi.metaData.get(keyName).toString();
-        } catch (Exception e) {
-            return "";
-        }
-    }
-
     public static String getMacAddress() {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if (adapter != null) {
@@ -336,5 +265,40 @@ public class SerialUtils {
         } else {
             return "none";
         }
+    }
+
+    /**
+     * 生成设备唯一标识：IMEI、AndroidId、macAddress 三者拼接再 MD5
+     * @return
+     */
+    public static String generateUniqueDeviceId(Context context){
+        String imei = "";
+        String androidId = "";
+        String macAddress = "";
+
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+        if (telephonyManager != null) {
+            imei = telephonyManager.getDeviceId();
+        }
+        ContentResolver contentResolver = context.getContentResolver();
+        if (contentResolver != null) {
+            androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID);
+        }
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager != null) {
+            macAddress = wifiManager.getConnectionInfo().getMacAddress();
+        }
+
+        StringBuilder longIdBuilder = new StringBuilder();
+        if (imei != null) {
+            longIdBuilder.append(imei);
+        }
+        if (androidId != null) {
+            longIdBuilder.append(androidId);
+        }
+        if (macAddress != null) {
+            longIdBuilder.append(macAddress);
+        }
+        return MD5Utils.getMD5(longIdBuilder.toString());
     }
 }

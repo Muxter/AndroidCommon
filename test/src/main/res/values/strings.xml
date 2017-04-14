@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidCommon</string>
+    <string name="title_activity_clean_process">CleanProcessActivity</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.matao.common.util;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
@@ -14,23 +15,54 @@ public class AppUtils {
         throw new UnsupportedOperationException("AppUtils cannot be instantiated!");
     }
 
-    public static int getAppVersionCode(Context context) {
+
+    /**
+     * 获取应用版本号
+     *
+     * @param context
+     * @return
+     */
+    public static String getVersionName(Context context) {
+        String version = "";
         try {
-            PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            return info.versionCode;
+            PackageManager packageManager = context.getPackageManager();
+            // getPackageName()是你当前类的包名，0代表是获取版本信息
+            PackageInfo packInfo;
+            packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            version = packInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return 1;
+        return version;
     }
 
-    public static String getAppVersionName(Context context) {
+    /**
+     * 获取应用代码版本号
+     *
+     * @param context
+     * @return
+     */
+    public static int getVersionCode(Context context) {
+        int versionCode = 0;
         try {
-            PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            return info.versionName;
+            PackageManager packageManager = context.getPackageManager();
+            // getPackageName()是你当前类的包名，0代表是获取版本信息
+            PackageInfo packInfo;
+            packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            versionCode = packInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return "";
+        return versionCode;
+    }
+
+    public static String getMetaData(Context context, String keyName) {
+        try {
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(),
+                PackageManager.GET_META_DATA);
+            return applicationInfo.metaData.get(keyName).toString();
+        } catch (Exception e) {
+            return "";
+        }
     }
 }
